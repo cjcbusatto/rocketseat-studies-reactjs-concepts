@@ -19,22 +19,50 @@ describe('App component', () => {
   it('should be able to add new repository', async () => {
     const { getByText, getByTestId } = render(<App />);
     apiMock.onGet('repositories').reply(200, []);
-    
+
     apiMock.onPost('repositories').reply(200, {
       id: '123',
       url: 'https://github.com/josepholiveira',
       title: 'Desafio ReactJS',
       techs: ['React', 'Node.js'],
     });
-    
+
     await actWait();
-    
-    // console.log(getByTestId("repository-list"))
+
     fireEvent.click(getByText('Add'));
-    
+
     await actWait();
 
     expect(getByTestId('repository-list')).toContainElement(getByText('Desafio ReactJS'));
+  });
+
+  it('should be able to list repositories', async () => {
+    const { getByText, getByTestId } = render(<App />);
+    apiMock.onGet('repositories').reply(200, [
+      {
+        id: '1',
+        url: 'https://github.com/josepholiveira',
+        title: 'Repository 1',
+        techs: ['React', 'Node.js'],
+      },
+      {
+        id: '2',
+        url: 'https://github.com/josepholiveira',
+        title: 'Repository 2',
+        techs: ['React', 'Node.js'],
+      },
+    ]);
+
+    await actWait();
+
+    const ulElem = getByTestId('repository-list');
+    
+    // The ul should contain 2 elements (Repository 1 and Repository 2)
+    expect(ulElem.children.length).toBe(2);
+    
+    // The li should include both items
+    expect(ulElem).toContainElement(getByText('Repository 1'));
+    expect(ulElem).toContainElement(getByText('Repository 2'));
   });
 
   it('should be able to remove repository', async () => {
