@@ -13,8 +13,8 @@ function App() {
   async function handleAddRepository() {
     const response = await api
     .post('repositories', {
-      url: 'https://github.com/Rocketseat/umbriel',
-      title: `Umbriel ${Date.now()}`,
+      url: 'https://github.com/cjcbusatto/',
+      title: `Repository ${Date.now()}`,
       techs: ['Node', 'Express', 'TypeScript'],
     });
     
